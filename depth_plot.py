@@ -7,7 +7,8 @@ Created on Wed May 27 10:27:55 2015
 'plot flat pictures about 7 sites` depth'
 import numpy as np
 import matplotlib.pyplot as plt
-from pydap.client import open_url
+#from pydap.client import open_url
+import netCDF4
 from utilities import lat2str, lon2str
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
@@ -22,13 +23,13 @@ def basemap_detail(fig,lat,lon,bathy,draw_parallels,TD,Bin,ALL=False,*parallels_
     url='http://geoport.whoi.edu/thredds/dodsC/bathy/gom03_v1_0' # no longer gom03_v03
     def get_index_latlon(url):# use the function to calculate the minlat,minlon,maxlat,maxlon location
         try:
-          dataset=open_url(url)
+          dataset=netCDF4.Dataset(url)
         except:
-          print "please check your url!"
+          print("please check your url!")
           sys.exit(0)
-        basemap_lat=dataset['lat']
-        basemap_lon=dataset['lon']
-        basemap_topo=dataset['topo']
+        basemap_lat=dataset.variables['lat'][:]
+        basemap_lon=dataset.variables['lon'][:]
+        basemap_topo=dataset.variables['topo'][:]
         # add the detail of basemap
         minlat=min(lat)-0.01
         maxlat=max(lat)+0.01
@@ -47,12 +48,12 @@ def basemap_detail(fig,lat,lon,bathy,draw_parallels,TD,Bin,ALL=False,*parallels_
     # You can set negative contours to be solid instead of dashed:
     matplotlib.rcParams['contour.negative_linestyle'] = 'solid'
     #plot the bathy
-    depth=basemap_topo.topo[min_index_lat-15:max_index_lat+15,index_minlon-15:index_maxlon+15]
-    print np.amin(depth),np.amax(depth)
+    depth=basemap_topo[min_index_lat-15:max_index_lat+15,index_minlon-15:index_maxlon+15]
+    print(np.amin(depth),np.amax(depth))
     if TD==True:
         if bathy==True:
             ax = fig.add_subplot(111, projection='3d')
-            surf = ax.plot_surface(X, Y, depth, rstride=10, cstride=10, cmap=cm.coolwarm,
+            surf = ax.plot_surface(X, Y, depth, rstride=10, cstride=10, cmap=plt.cm.rainbow,
                 linewidth=0, antialiased=False)
             ax.zaxis.set_major_locator(LinearLocator(10))
             cbar=fig.colorbar(surf, shrink=0.5, aspect=5)
