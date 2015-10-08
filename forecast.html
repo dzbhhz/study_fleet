@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+ <head>
+  <title>Forecast</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <META NAME="Generator" CONTENT="EditPlus">
+  <META NAME="Author" CONTENT="">
+  <META NAME="Keywords" CONTENT="">
+  <META NAME="Description" CONTENT="">
+  <style>
+  #header {
+        background-color: olive;
+        color:white;
+        text-align:center;
+        padding:5px;
+  }
+
+  #container {
+        width: 1300px;
+        height: 600px;
+        margin: auto;
+        float: left;
+        border: ;
+  }
+  #navibar{
+        line-height:2em;
+        background-color:gray;
+        height:710px;
+        width:200px;
+        float:left;
+        padding:5px;
+  }
+  #option{
+        background-color:brown:
+        list-style: none;
+        border: ;
+        margin-left: 0;
+        padding: 0;
+  }
+  #map{
+        line-height:2em;
+        background-color:gray;
+        height:710px;
+        width:760px; 
+        float:left;  
+        padding:5px; 
+  }
+   
+  #optionbar {
+        width: 300px;
+        height: 610px;
+        border-top: 30px;
+        border-bottom: 30px;
+        float: right;
+        background: white;
+        overflow: auto;   
+  }
+   
+  #bposition {
+        margin: 0 20px;
+  }                    
+  </style>             
+  </script>            
+ </head>               
+<body>                 
+<div id="header">      
+ <h2>Study Fleet option:Choose a site, plot type, and variable to forecast</h2>
+</div>
+<div id="container">
+  <div id="navibar">
+    <ul>
+     <h3>Program Option</h3>
+      <table border='1' bgcolor='#FAEBD7' cellpadding='10'>
+        <tr><td><a href="http://comet.nefsc.noaa.gov/ioos/sf/forecast.html">Study Fleet</a></td></tr>
+        <tr><td><a href="http://comet.nefsc.noaa.gov/ioos/sf/emolt_fvcom_gom3.html">eMOLT</a></td></tr>   
+      </table>
+    </ul> 
+  </div>  
+  <div id="map">
+     <img src='Site_all.png' alt="all sites" width="750" height="700" hspace="2" vspace="1" border="2" align="top"/>
+  </div>
+  <div id='optionbar'>
+   <form action='/cgi-bin/ioos/sf/forecast.py' modthed='post' name='form1'
+          onsubmit="return checkpoint()">
+     <br><p>
+     <li>Step 1: Choose site:</li>
+     <select name='site' onchange="initialize()">
+       <option value="3" selected="selected">site3</option>
+       <option value="4">site4</option>
+       <option value="5">site5</option>
+       <option value="6">site6</option>
+       <option value="7">site7</option>
+     </select>
+     <br><p>  
+     <li>Step 2: Choose plot type:</li>
+     <select name="series" id="series" onchange="redirect(this.options.selectedIndex)">
+       <option selected="selected">time series</option>
+       <option >map </option>   
+     </select>
+     <br><p>  
+     <li>Step 3: Choose variable</li>
+     <SELECT NAME="way" id="way">
+       <option value="bottom temperature" selected="selected">bottom temperature</option>
+       <option value="wind">wind</option>
+       <option value="wave">wave</option>
+       <option value="current">current</option>
+     </SELECT>
+     <br>
+     <br>
+     Step 4: Click submit
+     <p>
+     <input id="bposition" type="submit" name="submit" value="Submit">
+     <br><p>
+     <p>
+     <p>
+     Click <a href='info_sf.html'>here</a> for information on this utility.
+  </div>
+</div> 
+<script> 
+<!-- 
+var groups=document.form1.series.options.length 
+var group=new Array(groups) 
+for (I=0; I<groups; I++) 
+group[I]=new Array() 
+group[0][0]=new Option("bottom temperature","time series") 
+group[0][1]=new Option("wind","time series") 
+group[0][2]=new Option("wave","time series") 
+group[0][3]=new Option("current","time series") 
+group[1][0]=new Option("Bottom temp","Bottom temp") 
+group[1][1]=new Option("Wave-height","Wave-height") 
+group[1][2]=new Option("Current","Current") 
+var temp=document.form1.way 
+function redirect(x){ 
+for (m=temp.options.length-1;m>0;m--) 
+temp.options[m]=null 
+for (I=0;I<group[x].length;I++){ 
+temp.options[I]=new Option(group[x][I].text,group[x][I].value) 
+} 
+temp.options[0].selected=true 
+} 
+function go(){ 
+location=temp.options[temp.selectedIndex].value 
+} 
+//--> 
+</script>  
+</body> 
+</html> 
+
