@@ -24,7 +24,7 @@ lon_i=np.arange(min(lon),max(lon),one_minute)
 alat=lat_i[sites[0][1]]
 alon=lon_i[sites[0][0]]
 lonsize=[alon-20*one_minute,alon+20*one_minute]
-latsize=[alat-20*one_minute,alat+20*one_minute]
+latsize=[alat-20*one_minute,alat+20*one_minute] #basemap range
 url='http://www.smast.umassd.edu:8080/thredds/dodsC/models/fvcom/NECOFS/Forecasts/NECOFS_GOM3_FORECAST.nc'
 nc=netCDF4.Dataset(url)
 lons=nc.variables['lon'][:]
@@ -42,7 +42,7 @@ gca().patch.set_facecolor('0.5')
 cbar=colorbar()
 cbar.set_label('Water Depth (m)')
 ax.scatter(lon_i[sites[0][0]],lat_i[sites[0][1]],s=200,c='red',marker='*')
-ax.scatter(lon_i[sites[1][0]],lat_i[sites[1][1]],s=200,c='red',marker='*')
+ax.scatter(lon_i[sites[1][0]],lat_i[sites[1][1]],s=200,c='red',marker='*')  #star site 1 and site 2
 plt.annotate('site_1', xy=(lon_i[sites[0][0]], lat_i[sites[0][1]]),xytext=(lon_i[sites[0][0]],lat_i[sites[0][1]]-3*one_minute),arrowprops=dict(arrowstyle='->'),fontsize=12)
 plt.annotate('site_2', xy=(lon_i[sites[1][0]], lat_i[sites[1][1]]),xytext=(lon_i[sites[1][0]],lat_i[sites[1][1]]-3*one_minute),arrowprops=dict(arrowstyle='->'),fontsize=12)
 plt.title('Depth of site 1 and site 2',fontsize=20)
