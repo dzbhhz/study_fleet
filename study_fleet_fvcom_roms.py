@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu May  7 09:59:45 2015
-
+1)write a file named binned_td_FVCOM.csv which has FVCOM temperature
+2)write a file named binned_td_FVCOM_ROMS.csv which has ROMS temperature
 @author: zhaobin
 """
-'write a file named binned_td_fvcom.csv which has FVCOM temperature'
 import numpy as np
 import pandas as pd
 import netCDF4
