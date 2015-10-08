@@ -222,7 +222,7 @@ if method=='Bottom temp':
     except:
         nc1='Model does`t work now'
 try:
-    if type(nc) is netCDF4._netCDF4.Dataset:
+    if nc is not False:
         print "Content-type:text/html\r\n\r\n"
         print "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>"
         print "<html>"
