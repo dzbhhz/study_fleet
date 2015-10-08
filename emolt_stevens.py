@@ -22,13 +22,12 @@ import matplotlib.tri as Tri
 from matplotlib.mlab import griddata
 ##################################################################
 one_minute=1.0/60
-alat,alon,method=40.325,-71.592,'bottom temperature'
-'''
+
 form = cgi.FieldStorage()
 alat = float(form.getvalue('alat'))
 alon = float(form.getvalue('alon'))
 method = form.getvalue('way')
-'''
+
 lonsize=[alon-5*one_minute,alon+5*one_minute]
 latsize=[alat-5*one_minute,alat+5*one_minute]
 WAYS=[' ','Wind speed(m/s)','Wave height(m)','Bottom temperature(degC)','current']
@@ -139,19 +138,21 @@ if method=='bottom temperature':
                         I_emolt[i].remove(i_emolt[i][j])
                         INDX.remove(i_emolt[i][j])
             TEMP,TIME=pd.Series(TEMP),pd.Series(TIME)
-            for i in range(dif_year):
-                if len(TEMP[I_emolt[i]])>1:
-                    data={'temp':TEMP[I_emolt[i]],'time':TIME[I_emolt[i]]}
-                    Data=pd.DataFrame(data)
-                    ax2.plot(Data['time'].values,Data['temp'].values,label=str(start+i))
-            ymin,ymax=ax.get_ylim()
-            if min(TEMP[INDX].values)<ymin*1.8+32:
-                ax.set_ylim((min(TEMP[INDX].values)-32)/1.8,ymax)
-                ax2.set_ylim(min(TEMP[INDX].values),ymax*1.8+32)
-            ymin,ymax=ax.get_ylim()
-            if max(TEMP[INDX].values)>ymax*1.8+32:
-                ax.set_ylim(ymin,(max(TEMP[INDX].values)-32)/1.8)
-                ax2.set_ylim(ymin*1.8+32,max(TEMP[INDX].values))
+            emolt_n=len(TEMP[INDX])
+            if emolt_n>0:
+                for i in range(dif_year):
+                    if len(TEMP[I_emolt[i]])>1:
+                        data={'temp':TEMP[I_emolt[i]],'time':TIME[I_emolt[i]]}
+                        Data=pd.DataFrame(data)
+                        ax2.plot(Data['time'].values,Data['temp'].values,label=str(start+i))
+                ymin,ymax=ax.get_ylim()
+                if min(TEMP[INDX].values)<ymin*1.8+32:
+                    ax.set_ylim((min(TEMP[INDX].values)-32)/1.8,ymax)
+                    ax2.set_ylim(min(TEMP[INDX].values),ymax*1.8+32)
+                ymin,ymax=ax.get_ylim()
+                if max(TEMP[INDX].values)>ymax*1.8+32:
+                    ax.set_ylim(ymin,(max(TEMP[INDX].values)-32)/1.8)
+                    ax2.set_ylim(ymin*1.8+32,max(TEMP[INDX].values))
             xmin,xmax=ax2.get_xlim()
             ax.set_xlim(xmin-1,xmax)
             ax2.set_xlim(xmin-1,xmax)
@@ -281,9 +282,8 @@ if method=='Bottom temp':
         plt.savefig('/var/www/html/ioos/sf/fig/'+method+'.png')
     except:
         nc1='Model does`t work now'
-'''
 try:
-    if type(nc) is netCDF4._netCDF4.Dataset:
+    if nc is not False:
         print "Content-type:text/html\r\n\r\n"
         print "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>"
         print "<html>"
@@ -305,7 +305,7 @@ try:
             print "<p>"
             print 'Depth of '+str(emolt_name)+' is '+str(round(data_emolt['depth'][0],1))+'m'
             print "<p>"        
-            print 'Depth of selected site is '+str(round(depth_fvcom,1))+'m'
+            print 'Depth of selected site is '+str(round(depth_model,1))+'m'
             print "<p>"
         print "<img src='http://comet.nefsc.noaa.gov/ioos/sf/fig/%s.png' width='800' height='800' /> " %method
         print "</body>"
@@ -321,4 +321,3 @@ except:
     print "<font size='6' color='#FF0000'>Model can`t use now</font>"
     print "</body>"
     print "</html>"
-'''
