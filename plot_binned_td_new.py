@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 Created on Fri Aug 16 11:56:21 2013
-
+1)plot fish sites in each month
+2)convert png to gif
+3)plot distribution 
 @author: jmanning and zhaobin
 """
 
@@ -37,7 +39,7 @@ for i in range(len(df)):
     if df['MAX_DEPTH'][i]=='                                                                                                                               ':
         df['MAX_DEPTH'][i]=df['MEAN_DEPTH'][i]
     else:
-        df['MAX_DEPTH'][i]=float(df['MAX_DEPTH'][i])
+        df['MAX_DEPTH'][i]=float(df['MAX_DEPTH'][i])   #change str to float . some mean depths are empty.change them to 0.
 #convert ddmm.m to dd.ddd
 [la,lo]=dm2dd(df['LATITUDE'],df['LONGITUDE'])
 
@@ -62,7 +64,7 @@ title('bins with data 2006-2015')
 plt.show()
 savefig('/net/nwebserver/epd/ocean/MainPage/td/binned_td_hoey.png')
 
-'''
+
 # animation by month
 
 df['month']=df.index.month
@@ -96,7 +98,7 @@ for k in range(len(df)):
         m.drawparallels(np.arange(round(llLat), round(urLat),1.), labels=[1, 0, 0, 0])
         m.drawmeridians(np.arange(round(llLon), round(urLon),1.), labels=[0, 0, 0, 1])
         title(str(df.index.month[k])+'/'+str(df.index.year[k]))
-        print str(df.index.month[k])+'/'+str(df.index.year[k])
+        print(str(df.index.month[k])+'/'+str(df.index.year[k]))
        
 #make animation 
 try:
@@ -106,12 +108,12 @@ try:
     #cmd = PATH_FFMPEG + 'ffmpeg.exe -i ' + PATH_IMG + '  -r 15 -b 614000 ' + PATH_ANIM + anim_name
     cmd = 'convert -delay 40 -loop 0 '+ PATH_IMG + '2*.png ' + anim_name
     os.system(cmd)
-    print "Animation was created successfully."
+    print("Animation was created successfully.")
  
 except:
-    print  "Could not create animation."
-'''
-'''
+    print("Could not create animation.")
+
+
 # Depth vs Time
 plt.close('all')        
 plot_date(df.index,-df['MEAN_DEPTH'])
@@ -120,7 +122,7 @@ title('Depth of observations vs time')
 savefig('/net/nwebserver/epd/ocean/MainPage/td/binned_td_hoey_depth.png')
 
 #expoert data to file
-df.to_csv('/net/nwebserver/epd/ocean/MainPage/td/binned_td_hoey.csv',float_format='%10.2f')
+df.to_csv('/net/nwebserver/epd/ocean/MainPage/td/binned_td_hoey111.csv',float_format='%10.2f')
 
 #distribution plots
 f,ax1 = plt.subplots(2)#sharex=True
@@ -133,5 +135,5 @@ bins=range(0,320,20)
 ax1[1].hist(df['MEAN_DEPTH'],bins)
 ax1[1].set_xlabel('Depths of Observations')
 ax1[1].set_ylabel('# of Obs')
-'''
+
 plt.show()
