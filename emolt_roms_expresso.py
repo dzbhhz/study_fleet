@@ -15,22 +15,24 @@ import datetime
 import pytz
 from dateutil import tz
 import matplotlib.pyplot as plt
-from MODULES import dm2dd,DIST,FIG_PLOT_emolt,whichArea,draw_basemap,stick_plot,get_emolt_data,getobs_tempsalt,rot2d,shrink,bbox2ij,gmt_to_loc
+from MODULES import dm2dd,DIST,FIG_PLOT_emolt,whichArea,draw_basemap,stick_plot,get_emolt_data,getobs_tempsalt,rot2d,shrink,bbox2ij,gmt_to_loc,get_roms_url
 from pylab import *
 from mpl_toolkits.basemap import Basemap
 import matplotlib.tri as Tri
 from matplotlib.mlab import griddata
 ##################################################################
 one_minute=1.0/60
+
 form = cgi.FieldStorage()
 alat = float(form.getvalue('alat'))
 alon = float(form.getvalue('alon'))
 method = form.getvalue('way')
+
 lonsize=[alon-5*one_minute,alon+5*one_minute]
 latsize=[alat-5*one_minute,alat+5*one_minute]
 WAYS=[' ','Wind speed(m/s)','Wave height(m)','Bottom temperature(degC)','current']
 if method=='bottom temperature':
-    url='http://tds.marine.rutgers.edu:8080/thredds/dodsC/roms/espresso/2013_da/his_Best/ESPRESSO_Real-Time_v2_History_Best_Available_best.ncd'
+    url=get_roms_url(datetime.datetime.now(),'forecast')
     try:
         nc=netCDF4.Dataset(url)
         lons=nc.variables['lon_rho'][:]
@@ -82,7 +84,8 @@ if method=='bottom temperature':
                         I_emolt[i].remove(i_emolt[i][j])
                         INDX.remove(i_emolt[i][j])
             TEMP,TIME=pd.Series(TEMP),pd.Series(TIME)
-            if len(TEMP[INDX])>0:
+            emolt_n=len(TEMP[INDX])
+            if emolt_n>0:
                 for i in range(dif_year):
                     if len(TEMP[I_emolt[i]])>1:
                         data={'temp':TEMP[I_emolt[i]],'time':TIME[I_emolt[i]]}
@@ -104,7 +107,7 @@ if method=='bottom temperature':
     except:
         nc1='Model does`t work now'
 if method=='current':
-    url='http://tds.marine.rutgers.edu:8080/thredds/dodsC/roms/espresso/2013_da/his_Best/ESPRESSO_Real-Time_v2_History_Best_Available_best.ncd'
+    url=get_roms_url(datetime.datetime.now(),'forecast')
     try:
         nc=netCDF4.Dataset(url)
         lons=nc.variables['lon_rho'][:]
@@ -136,7 +139,7 @@ if method=='current':
     except:
         nc1='Model does`t work now'
 if method=='Current':
-    url = 'http://tds.marine.rutgers.edu:8080/thredds/dodsC/roms/espresso/2013_da/his_Best/ESPRESSO_Real-Time_v2_History_Best_Available_best.ncd'
+    url=get_roms_url(datetime.datetime.now(),'forecast')
     try:
         nc = netCDF4.Dataset(url)
         time = nc.variables['time'][:]  #recent 6 days '
@@ -183,7 +186,7 @@ if method=='Current':
     except:
         nc1='Model does`t work now'
 if method=='Bottom temp':
-    url = 'http://tds.marine.rutgers.edu:8080/thredds/dodsC/roms/espresso/2013_da/his_Best/ESPRESSO_Real-Time_v2_History_Best_Available_best.ncd'
+    url=get_roms_url(datetime.datetime.now(),'forecast')
     try:
         nc = netCDF4.Dataset(url)
         time = nc.variables['time'][:]  #recent 6 days '
@@ -228,8 +231,9 @@ if method=='Bottom temp':
         plt.savefig('/var/www/html/ioos/sf/fig/roms'+method+'.png')
     except:
         nc1='Model does`t work now'
+
 try:
-    if type(nc) is netCDF4._netCDF4.Dataset:
+    if nc is not False:
         print "Content-type:text/html\r\n\r\n"
         print "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>"
         print "<html>"
