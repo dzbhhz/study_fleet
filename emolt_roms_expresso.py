@@ -255,7 +255,7 @@ try:
             print "<p>"
             print 'Depth of '+str(emolt_name)+' is '+str(round(data_emolt['depth'][0],1))+'m'
             print "<p>"        
-            print 'Depth of selected site is '+str(round(depth_fvcom,1))+'m'
+            print 'Depth of selected site is '+str(round(depth_model,1))+'m'
             print "<p>"
         print "<img src='http://comet.nefsc.noaa.gov/ioos/sf/fig/%s.png' width='800' height='800' /> " %method
         print "</body>"
