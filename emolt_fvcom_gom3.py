@@ -20,14 +20,10 @@ import matplotlib.tri as Tri
 from matplotlib.mlab import griddata
 ##################################################################
 one_minute=1.0/60
-alat,alon=42.408,-67.374
-method='bottom temperature'
-'''
 form = cgi.FieldStorage()
 alat = float(form.getvalue('alat'))
 alon = float(form.getvalue('alon'))
 method = form.getvalue('way')
-'''
 lonsize=[alon-5*one_minute,alon+5*one_minute]
 latsize=[alat-5*one_minute,alat+5*one_minute]
 WAYS=[' ','Wind speed(m/s)','Wave height(m)','Bottom temperature(degC)','current']
@@ -154,7 +150,7 @@ if method=='bottom temperature':
         ax.set_xlim(xmin-1,xmax)
         ax2.set_xlim(xmin-1,xmax)
         plt.legend(loc='best') 
-        #plt.savefig('/var/www/html/ioos/sf/fig/'+method+'.png')
+        plt.savefig('/var/www/html/ioos/sf/fig/'+method+'.png')
     except:
         nc1='Model does`t work now'
 if method=='current':
@@ -316,7 +312,6 @@ if method=='Wave-height':
         plt.savefig('/var/www/html/ioos/sf/fig/'+method+'.png')
     except:
         nc1='Model does`t work now'
-'''
 try:
     if type(nc) is netCDF4._netCDF4.Dataset:
         print "Content-type:text/html\r\n\r\n"
@@ -356,4 +351,4 @@ except:
     print "<font size='6' color='#FF0000'>Model can`t use now</font>"
     print "</body>"
     print "</html>"
-'''
+
