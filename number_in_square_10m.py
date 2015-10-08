@@ -19,8 +19,8 @@ data=pd.read_csv('binned_td_hoey.csv')
 lat,lon=dm2dd(data['LATITUDE'],data['LONGITUDE']) #convert ddmm.m to dd.ddd
 for i in range(len(data)):
     data['datet'][i]=datetime.strptime(data['datet'][i],'%Y-%m-%d %H:%M:%S')
-lat_i=np.arange(int(min(lat)),int(max(lat))+1,ten_minute)   
-lon_i=np.arange(int(min(lon)),int(max(lon))+1,ten_minute) 
+lat_i=np.arange(int(min(lat)),int(max(lat)),ten_minute)   
+lon_i=np.arange(int(min(lon)),int(max(lon)),ten_minute) 
 number=[]
 for q in range(10):
     number.append([])
