@@ -16,14 +16,10 @@ import matplotlib.pyplot as plt
 from MODULES import DIST,FIG_PLOT_emolt_30yr,get_emolt_data
 ##################################################################
 one_minute=1.0/60
-alat,alon=42.421,-67.357
-method='bottom temperature'
-'''
 form = cgi.FieldStorage()
 alat = float(form.getvalue('alat'))
 alon = float(form.getvalue('alon'))
 method = form.getvalue('way')
-'''
 lonsize=[alon-5*one_minute,alon+5*one_minute]
 latsize=[alat-5*one_minute,alat+5*one_minute]
 WAYS=[' ','Wind speed(m/s)','Wave height(m)','Bottom temperature(degC)','current']
@@ -60,7 +56,7 @@ if method=='bottom temperature':
         xmin,xmax=ax.get_ylim()
         ax2.set_ylim(xmin*1.8+32,xmax*1.8+32)
         plt.legend(loc='best') 
-        #plt.savefig('/var/www/html/ioos/sf/fig/'+method+'.png')
+        plt.savefig('/var/www/html/ioos/sf/fig/'+method+'.png')
     except:
         nc1='Model does`t work now'
 try:
