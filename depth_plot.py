@@ -63,11 +63,12 @@ def basemap_detail(fig,lat,lon,bathy,draw_parallels,TD,Bin,ALL=False,*parallels_
         if bathy==True:
             if Bin>5:
                 CS=plt.contourf(X,Y,depth,np.arange(round(np.amin(depth))-1,1,2),cmap=plt.cm.rainbow,
-                     vmax=round(np.amax(depth)), vmin=round(np.amin(depth)))
+                     vmax=1, vmin=round(np.amin(depth)))
             else:
+
                 if np.amax(depth)>0:
                     CS=plt.contourf(X,Y,depth,np.arange(round(np.amin(depth))-1,1),cmap=plt.cm.rainbow,
-                            vmax=round(np.amax(depth)), vmin=round(np.amin(depth)))
+                            vmax=1, vmin=round(np.amin(depth)))
                 if np.amax(depth)<0:
                     CS=plt.contourf(X,Y,depth,np.arange(round(np.amin(depth))-1,np.max(depth)+2),cmap=plt.cm.rainbow,
                           vmax=round(np.amax(depth)), vmin=round(np.amin(depth)))
