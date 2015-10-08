@@ -1,0 +1,276 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html> 
+ <head>
+  <title>FVCOM</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <META NAME="Generator" CONTENT="EditPlus">
+  <META NAME="Author" CONTENT="">     
+  <META NAME="Keywords" CONTENT="">   
+  <META NAME="Description" CONTENT="">
+  <style>
+   #header {
+        background-color: olive;
+        color:white;
+        text-align:center;
+        padding:5px;
+   }
+   
+   #container {
+        width: 1300px;
+        height: 600px;
+        margin: auto; 
+        float: left;  
+        border: ;     
+   }
+   #navibar{
+        line-height:2em;
+        background-color:gray;
+        height:710px;
+        width:200px; 
+        float:left;  
+        padding:5px; 
+   }
+   #map-canvas{
+        line-height:2em;
+        background-color:gray;
+        height:710px;
+        width:760px; 
+        float:left;  
+        padding:5px; 
+   }
+   
+   #optionbar {
+        width: 300px;
+        height: 610px;
+        border-top: 30px;
+        border-bottom: 30px;
+        float: right;
+        background: white;
+        overflow: auto;   
+   }
+   
+   #bposition {
+         margin: 0 20px;
+   }
+  </style>
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+  <script type="text/javascript" >
+     var infowindow = new google.maps.InfoWindow();
+     var locations = [
+                     ['WP01', 43.872, -69.112],['RS01', 44.017, -68.547],['NM01', 45.641, -60.208],
+                     ['AC02', 41.815, -70.460],['SI02', 43.713, -68.839],['TA24', 40.1  , -68.863],
+                     ['RG01', 43.735, -69.887],['DMF0', 42.333, -70.867],['EP01', 43.680, -65.240],
+                     ['BT03', 43.651, -70.224],['MJ09', 39.94,  -69.547],['ON04', 41.656, -70.074],
+                     ['AP01', 43.798, -69.602],['OM03', 43.845, -68.948],['IC01', 45.188, -61.222],
+                     ['ES01', 46.358, -60.397],['JV02', 40.594, -70.778],['JP22', 39.562, -72.477],
+                     ['KM01', 41.676, -69.902],['PM04', 42.167, -70.533],['BL01', 44.57,  -67.043],
+                     ['ON02', 41.664, -69.997],['PB02', 39.937, -69.833],['BT04', 43.647, -70.222],
+                     ['AC01', 41.774, -70.481],['PB03', 39.922, -69.728],['MO01', 41.94,  -70.503],
+                     ['PM03', 42.167, -70.667],['JP19', 39.62,  -72.118],['DM03', 43.955, -69.17 ],
+                     ['SR08', 42.32,  -70.906],['CW01', 43.827, -69.623],['JP02', 40.33,  -71.665],
+                     ['OD08', 44.605, -67.086],['CC01', 44.496, -67.034],['RR01', 44.468, -63.855],
+                     ['PM02', 42.15,  -70.583],['PC01', 44.618, -66.55 ],['NL02', 44.678, -66.954],
+                     ['DS01', 39.989, -69.612],['PM01', 42.183, -70.5  ],['SG01', 43.734, -70.147],
+                     ['JD01', 44.028, -68.855],['RP01', 43.065, -70.61 ],['MW03', 43.798, -69.877],
+                     ['MC02', 42.527, -70.663],['TS02', 42.512, -70.8  ],['BT01', 43.764, -70.098],
+                     ['TA14', 40.089, -68.862],['DMF8', 42.325, -70.97 ],['RM03', 42.104, -70.289],
+                     ['JP16', 39.775, -72.99 ],['JA02', 41.94,  -69.92 ],['JA01', 41.849, -69.917],
+                     ['OM01', 43.828, -68.968],['ET02', 43.703, -70.166],['CP02', 43.824, -68.926],
+                     ['MA10', 41.588, -70.653],['DMF9', 41.758, -70.42 ],['WL01', 41.762, -70.26 ],
+                     ['JM01', 44.037, -68.124],['RB01', 44.482, -67.269],['MW01', 43.677, -69.923],
+                     ['WD02', 44.028, -68.879],['PF01', 42.999, -70.422],['SJ01', 43.758, -68.898],
+                     ['LC01', 43.754, -69.327],['BBHR', 43.844, -69.642],['TH01', 43.956, -68.969],
+                     ['TS01', 42.497, -70.789],['PW01', 43.132, -70.617],['RB02', 44.406, -67.335],
+                     ['GR01', 44.049, -68.642],['GS01', 44.588, -67.357],['RA01', 44.252, -68.192],
+                     ['GR02', 44.089, -68.621],['OC01', 40.406, -70.039],['DK01', 41.924, -70.331],
+                     ['BD01', 42.332, -70.873],['JT04', 43.772, -68.67 ],['MF02', 44.323, -68.115],
+                     ['CJ01', 44.38 , -68.12 ],['RM04', 41.977, -70.222],['AB01', 42.037, -70.131],
+                     ['BS02', 42.062, -70.055],['DC01', 44.006, -69.04 ],['MM01', 41.208, -71.235],
+                     ['WD01', 44.002, -68.88 ],['BI02', 44.485, -67.327],['BI01', 44.487, -67.248],
+                     ['JC01', 44.278, -67.955],['BC01', 44.492, -67.192],['CP01', 43.79,  -68.866],
+                     ['KO01', 41.985, -70.512],['BM02', 43.724, -69.571],['RM02', 42.152, -70.3  ],
+                     ['BF01', 44.127, -68.158],['RM01', 42.219, -70.061],['ET01', 43.748, -70.164],
+                     ['BA03', 44.6,   -67.041],['DMF6', 41.446, -70.989],['NL01', 44.592, -67.069],
+                     ['DMF5', 41.959, -70.584],['DJ01', 43.356, -70.137],['BM01', 43.782, -69.515],
+                     ['JS02', 42.407, -67.393],['DMF2', 41.946, -70.489],['DMF7', 41.446, -70.989],
+                     ['JS06', 42.497, -67.473],['DMF4', 41.903, -70.513],['DMF1', 42.395, -70.864],
+                     ['WHAQ', 41.542, -70.673],['BN01', 42.914, -70.709],['TA15', 40.062, -69.067],
+                     ['BA02', 44.652, -67.006],['AG01', 43.821, -69.544],['BA01', 44.627, -67.048]];
+     function initialize() {
+        var mapOptions = {
+            zoom: 6,
+            center: new google.maps.LatLng(42.176,-66.929),
+            mapTypeId: google.maps.MapTypeId.SATELLITE
+        };
+
+        var map = new google.maps.Map(document.getElementById('map-canvas'),
+                  mapOptions);
+        var flightPlanCoordinates = [
+            new google.maps.LatLng(46.120,-59.814),
+	    new google.maps.LatLng(42.976,-56.961),
+	    new google.maps.LatLng(41.967,-56.906),
+	    new google.maps.LatLng(35.281,-72.639),
+	    new google.maps.LatLng(35.558,-73.864),
+	    new google.maps.LatLng(37.422,-75.755)
+            ];
+        var flightPath = new google.maps.Polyline({
+            path: flightPlanCoordinates,
+            geodesic: true,
+            strokeColor: 'red',
+            strokeOpacity: 1.0,
+            strokeWeight: 2
+        });
+
+        flightPath.setMap(map);
+       google.maps.event.addListener(map, 'click', function(e) {
+            placeMarker(e.latLng, map);
+       }); 
+       setMarkers(map,locations)  
+     }       
+             
+     function placeMarker(position, map) {   
+        var marker = new google.maps.Marker({
+           position: position,
+           map: map
+        });
+        document.form1.alon.value=parseFloat(position.lng()).toFixed(3);
+        document.form1.alat.value=parseFloat(position.lat()).toFixed(3);
+        map.panTo(position);                                    
+     }       
+     function showup(){
+        var lon=document.form1.alon.value;
+        var lat=document.form1.alat.value;
+         if (!lon || !lat) {
+                window.alert("You should enter a point.");
+         }
+         else {
+                var myLatLng = new google.maps.LatLng(lat,lon);
+                var mapOptions = {
+                        zoom: 7,
+                        center: myLatLng,
+                        mapTypeId:google.maps.MapTypeId.SATELLITE
+                    }
+                var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+                placeMarker(myLatLng,map)
+         }   
+     }                                                          
+     google.maps.event.addDomListener(window,'load', initialize);
+     function setMarkers(map,locations){
+        var pinColor = "FE7569";
+        var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,new google.maps.Size(21, 34),new google.maps.Point(0,0),new google.maps.Point(10, 34));
+        for (var i = 0; i < locations.length; i++){  
+             var loan = locations[i][0]
+             var lat = locations[i][1]
+             var lon = locations[i][2]
+             var add =  locations[i][3]
+             latlngset = new google.maps.LatLng(lat, lon);
+             var marker = new google.maps.Marker({  
+                 map: map, 
+                 position: latlngset,
+                 icon:pinImage
+             });
+             var content = "eMOLT: " + loan +  '</h3>' + ", Lat: " +lat+', Lon:'+lon      
+             google.maps.event.addListener(marker,'click', (function(marker,content,infowindow){ 
+                   return function() {
+                      infowindow.setContent(content);
+                      
+                      infowindow.open(map,marker);
+                   };
+                })(marker,content,infowindow));
+             infowindow.close();
+      }
+  }
+  </script>
+ </head>
+<body>
+<div id="header">
+ <h1>Ocean Bottom Conditions at eMOLT locations
+ <h2>Make selections on right, click submit, and wait nearly a minute.</h2>
+</div>
+<div id="container">
+  <div id="navibar">
+    <ul>  
+      <h3>Program Option</h3>
+       <table border='1' bgcolor='#FAEBD7' cellpadding='10'>
+        <tr><td><a href="http://comet.nefsc.noaa.gov/ioos/sf/forecast.html">Study Fleet</a></td></tr>
+        <tr><td><a href="http://comet.nefsc.noaa.gov/ioos/sf/emolt_fvcom_gom3.html">eMOLT</a></td></tr>
+       </table>                           
+    </ul>
+  </div>
+  <div id="map-canvas"></div>
+  <div id='optionbar'>
+   <form action='/cgi-bin/ioos/sf/emolt_fvcom_gom3.py' modthed='post' name='form1'
+          onsubmit="return checkpoint()">
+     <br><p>
+     <li>Step 1: Choose model</li>
+        <select name="model" onchange="self.location.href=options[selectedIndex].value">
+                      <option value="http://comet.nefsc.noaa.gov/ioos/sf/emolt_roms_expresso.html">ROMS-expresso</option>
+           <option value="http://comet.nefsc.noaa.gov/ioos/sf/emolt_roms_mabgom.html">ROMS-mabgom</option>
+           <option value="http://comet.nefsc.noaa.gov/ioos/sf/emolt_fvcom_gom3.html" selected="selected">FVCOM-GOM3</option>
+           <option value="http://comet.nefsc.noaa.gov/ioos/sf/emolt_fvcom_30yr.html">FVCOM-30yr</option>
+           <option value="http://comet.nefsc.noaa.gov/ioos/sf/emolt_fvcom_massbay.html">FVCOM-massbay</option>
+           <option value="http://comet.nefsc.noaa.gov/ioos/sf/emolt_stevens.html">STEVENS</option>        
+        </select>                               
+     <li>Step 2: Enter latitude and longitude or click map:</li>
+     "Longitude"
+     <input type="text" name="alon" size="8" value onblur maxlegnth="10">
+     <p>
+     "Latitude"
+     <input type="text" name="alat" size="8" value onblur maxlength="10">
+     <input type="button" value="show on map" onclick="showup()">
+     <br><p>
+     <li>Step 3: Choose plot type:</li>
+     <select name='series' onchange="redirect(this.options.selectedIndex)">
+       <option value="time series" >time series</option>
+       <option value="map">map </option>
+     </select>
+     <br><p>
+     <li>Step 4: Choose variable</li>
+     <SELECT NAME="way">
+       <option value="bottom temperature">bottom temperature</option>
+       <option value="wind">wind</option>
+       <option value="wave">wave</option>
+       <option value="current">current</option>                     
+     </SELECT>
+     <br>
+     <br>
+     Step 5: Click submit
+     <p> 
+     <input id="bposition" type="submit" name="submit" value="Submit">
+     <br><p>
+     <p>
+     <p>
+     Click <a href='info_emolt.html'>here</a> for information on this utility.
+  </div>
+</div>
+<script>
+<!--    
+var groups=document.form1.series.options.length
+var group=new Array(groups) 
+for (I=0; I<groups; I++)    
+group[I]=new Array()        
+group[0][0]=new Option("bottom temperature","time series")
+group[0][1]=new Option("wind","time series") 
+group[0][2]=new Option("wave","time series") 
+group[0][3]=new Option("current","time series")
+group[1][0]=new Option("Bottom temp","Bottom temp")
+group[1][1]=new Option("Wave-height","Wave-height")
+group[1][2]=new Option("Current","Current") 
+var temp=document.form1.way 
+function redirect(x){ 
+for (m=temp.options.length-1;m>0;m--)
+temp.options[m]=null 
+for (I=0;I<group[x].length;I++){
+temp.options[I]=new Option(group[x][I].text,group[x][I].value)
+} 
+temp.options[0].selected=true
+} 
+function go(){
+location=temp.options[temp.selectedIndex].value
+} 
+//--> 
+</script>
+
+</body> 
+</html> 
+
