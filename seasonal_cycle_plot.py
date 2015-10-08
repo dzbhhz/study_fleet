@@ -4,7 +4,6 @@ Created on Thu May 21 10:51:29 2015
 Plots both a seasonal mean cycle and individual years of Study Fleet data
 @author: zhaobin
 """
-''
 import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime,timedelta
@@ -61,7 +60,7 @@ for s in range(len(sites)):
                 indx_year[j].append(i)       #get index of data in different years
     for i in indx: # for all cases of the data inside the bin
         for j in indx: 
-            if data['datet'][i]==data['datet'][j] and i<>j:
+            if data['datet'][i]==data['datet'][j] and i!=j:
                 indx.remove(i)       #remove index of some data which are in same time and same site
                 data['MEAN_TEMP'][j]=np.mean([data['MEAN_TEMP'][i],data['MEAN_TEMP'][i]])  #calculate average of some data which are in same time and same site
                 for q in range(len(indx_year)):
@@ -87,7 +86,7 @@ for s in range(len(sites)):
     ax.grid(True)
     ax1=fig.add_subplot(212,sharex=ax)
     Indx=[]
-    for i in range(10):
+    for i in range(10): 
         Indx.append([])
         for j in range(len(value_without_season)):
             if value_without_season.index[j].year==2006+i:
