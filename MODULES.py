@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Jun  3 13:47:53 2015
-
+some functions
 @author: zhaobin
 """
 import netCDF4
