@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """
 Created on Fri May  1 11:10:45 2015
-
+plot temperature off New Hampshire and some details
 @author: zhobin
 """
-'plot temperature off New Hampshire and some details'
+
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib import animation
