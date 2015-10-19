@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed May 27 10:27:55 2015
-
+plot flat pictures about 7 sites` depth
 @author: zhaobin
 """
-'plot flat pictures about 7 sites` depth'
 import numpy as np
 import matplotlib.pyplot as plt
 #from pydap.client import open_url
