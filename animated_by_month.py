@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Apr 30 15:56:28 2015
-
+plot dots animated by month
 @author: zhaobin
 """
-'plot dots animated by month'
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib import animation
