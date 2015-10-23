@@ -98,7 +98,7 @@ if method=='bottom temperature':
         depth_fvcom=nc.variables['h'][index_nearest]  #get depth of fvcom
         T,TEMP_f=[],[]
         TEMP=temp[:,39,index_nearest]
-        TEMP=np.round(TEMP,1)  #because emolt temp only have 0.1 degC
+        TEMP=np.round(TEMP,1)
         for i in range(len(time)):   
             t=datetime.datetime(1858,11,17)+datetime.timedelta(days=int(time[i]))+datetime.timedelta(seconds=int(time[i]%1*24*3600))
             t=gmt_to_loc(t)
@@ -149,7 +149,7 @@ if method=='bottom temperature':
         xmin,xmax=ax.get_xlim()
         ax.set_xlim(xmin-1,xmax)
         ax2.set_xlim(xmin-1,xmax)
-        plt.legend(loc='best') 
+        plt.legend(loc='lower left') 
         plt.savefig('/var/www/html/ioos/sf/fig/'+method+'.png')
     except:
         nc1='Model does`t work now'
@@ -312,8 +312,52 @@ if method=='Wave-height':
         plt.savefig('/var/www/html/ioos/sf/fig/'+method+'.png')
     except:
         nc1='Model does`t work now'
+if method=='Wind':
+    url='http://www.smast.umassd.edu:8080/thredds/dodsC/FVCOM/NECOFS/Forecasts/NECOFS_MET_FORECAST.nc'
+    nc=netCDF4.Dataset(url)
+    lon=nc.variables['XLONG'][:]
+    lat=nc.variables['XLAT'][:] 
+    time=nc.variables['Times'][:]
+    start=datetime.datetime.now(pytz.timezone("America/New_York"))
+    T=[]
+    for i in range(len(time)):
+        t=''
+        for j in range(len(time[i])):
+            t=t+str(time[i][j])
+        t=datetime.datetime.strptime(t,"%Y-%m-%d_%H:%M:%S")
+        t=gmt_to_loc(t)
+        T.append(t)
+    itime=np.argmin(abs(np.array(T)-start))   #find nearest time
+    daystr=T[itime]
+    U= nc.variables['U10'][itime, :, :]
+    V= nc.variables['V10'][itime, :, :]
+    lons,lats=[],[]
+    u,v=[],[]
+    for i in range(len(lon)):
+        for j in range(len(lat)):
+            lons.append(lon[i][j])
+            lats.append(lat[i][j])
+            u.append(U[i][j])
+            v.append(V[i][j])
+    lons,lats=np.array(lons),np.array(lats)
+    u,v=np.array(u),np.array(v)
+    tri = Tri.Triangulation(lons,lats)
+    CX= [alon-20*one_minute,alon+20*one_minute,alat-20*one_minute,alat+20*one_minute] # box you want to plot
+    ind = argwhere((lons >= CX[0]) & (lons <= CX[1]) & (lats >= CX[2]) & (lats <= CX[3]))  # find velocity points in bounding box
+    np.random.shuffle(ind)
+    Nvec = len(ind)
+    idv = ind[:Nvec]
+    fig=plt.figure(figsize=(12,10))
+    ax=fig.add_subplot(111)  #,aspect=(1.0/cos(mean(lat)*pi/180.0)))
+    draw_basemap(fig, ax, [CX[0],CX[1]],[CX[2],CX[3]],interval_lon=20*one_minute, interval_lat=20*one_minute)
+    Q = quiver(lons[idv],lats[idv],u[idv],v[idv])
+    maxvel =np.sqrt(np.max(abs(u[idv]))*np.max(abs(u[idv]))+np.max(abs(v[idv]))*np.max(abs(v[idv])))
+    maxstr='%3.1f m/s' % maxvel
+    qk = quiverkey(Q,0.92,0.08,maxvel,maxstr,labelpos='W')
+    title('Wind ,'+str(daystr)[0:-6]+'(local time)',fontsize=15)
+    plt.savefig('/var/www/html/ioos/sf/fig/'+method+'.png')        
 try:
-    if type(nc) is netCDF4._netCDF4.Dataset:
+    if nc is not False:
         print "Content-type:text/html\r\n\r\n"
         print "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>"
         print "<html>"
@@ -351,4 +395,3 @@ except:
     print "<font size='6' color='#FF0000'>Model can`t use now</font>"
     print "</body>"
     print "</html>"
-
